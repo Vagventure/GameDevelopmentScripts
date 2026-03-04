@@ -25,7 +25,18 @@ public class CuttingCounter : BaseCounter, IProgressBar
         else
         {
             //Do nothing counter already has an object
-            if (!player.HasKitchenobject())
+            if (player.HasKitchenobject())
+            {
+                if (player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject))
+                {
+                    if (plateKitchenObject.TryAddIngridient(GetKitchenObject().GetKitchenObjectSO()))
+                    {
+                        GetKitchenObject().DestroySelf();
+                    }
+
+                }
+            }
+            else
             {
                 GetKitchenObject().SetKitchenObjectParent(player);
             }
