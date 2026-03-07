@@ -4,13 +4,8 @@ public class ClearCounter : MonoBehaviour
 {
     [SerializeField] private KitchenObjectsSO spawnObject;
 
-    private void Start()
+   public void Interact()
     {
-        
-    }
-
-    private void Interact()
-    {
-
+        Debug.Log("Interaction Performed");
     }
 }

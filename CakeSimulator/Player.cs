@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
+    public static Player Instance { get; private set; }
     public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
     public class OnSelectedCounterChangedEventArgs : EventArgs
     {
@@ -15,7 +16,7 @@ public class Player : MonoBehaviour
     [SerializeField]private float rotationSpeed = 3.0f;
     [SerializeField]private float maxCollisionDistance = 0.2f;
     [SerializeField]private float playerHeight = 2f;
-    [SerializeField] private float playerRadius = 0.7f;
+    [SerializeField]private float playerRadius = 0.7f;
 
     private bool isWalking;
     private Vector3 lastInteraction;
@@ -26,9 +27,18 @@ public class Player : MonoBehaviour
         input.OnInteractPerformed += Input_OnInteractPerformed;
     }
 
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Debug.Log("More than one instance of player exists");
+        }
+        Instance = this;
+    }
+
     private void Input_OnInteractPerformed(object sender, System.EventArgs e)
     {
-        Debug.Log("Interact Performed");
+        selectedCounter.Interact();
     }
 
     private void Update()
@@ -96,13 +106,14 @@ public class Player : MonoBehaviour
         {
             if(hitInfo.transform.TryGetComponent(out ClearCounter clearCounter))
             {
-                Debug.Log(hitInfo.transform.ToString());
+                //Debug.Log("hit");
                 if (clearCounter != selectedCounter)
                 {
                     selectedCounter = clearCounter;
 
                     SetSelectedCounter(selectedCounter);
-               
+                //Debug.Log("Invoked");
+
                 }
             }
             else
@@ -113,7 +124,7 @@ public class Player : MonoBehaviour
         else
         {
             SetSelectedCounter(null);
-            Debug.Log("Nothing hit");
+            //Debug.Log("Nothing hit");
         }
     }
 
