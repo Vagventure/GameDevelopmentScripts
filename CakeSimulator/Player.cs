@@ -38,7 +38,10 @@ public class Player : MonoBehaviour
 
     private void Input_OnInteractPerformed(object sender, System.EventArgs e)
     {
-        selectedCounter.Interact();
+        if (selectedCounter != null)
+        {
+           selectedCounter.Interact();
+        }
     }
 
     private void Update()

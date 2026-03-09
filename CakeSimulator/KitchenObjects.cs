@@ -2,15 +2,14 @@ using UnityEngine;
 
 public class KitchenObjects : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+   public static KitchenObjects SpawnKitchenObject(KitchenObjectsSO kitchenObjectsSO, Transform counterTopPoint)
     {
+        Transform transform = Instantiate(kitchenObjectsSO.prefab, counterTopPoint);
+        transform.localPosition = Vector3.zero;
+        KitchenObjects kitchenObjects = transform.GetComponent<KitchenObjects>();
+
+        return kitchenObjects;
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
