@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
     public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
     public class OnSelectedCounterChangedEventArgs : EventArgs
     {
-        public ClearCounter selectedCounter;
+        public BaseCounter selectedCounter;
     }
 
     [SerializeField]private PlayerInput input;
@@ -20,7 +20,7 @@ public class Player : MonoBehaviour
 
     private bool isWalking;
     private Vector3 lastInteraction;
-    private ClearCounter selectedCounter;
+    private BaseCounter selectedCounter;
 
     private void Start()
     {
@@ -107,12 +107,12 @@ public class Player : MonoBehaviour
 
         if (Physics.Raycast(transform.position, lastInteraction, out RaycastHit hitInfo, maxInteractDistance))
         {
-            if(hitInfo.transform.TryGetComponent(out ClearCounter clearCounter))
+            if(hitInfo.transform.TryGetComponent(out BaseCounter baseCounter))
             {
                 //Debug.Log("hit");
-                if (clearCounter != selectedCounter)
+                if (baseCounter != selectedCounter)
                 {
-                    selectedCounter = clearCounter;
+                    selectedCounter = baseCounter;
 
                     SetSelectedCounter(selectedCounter);
                 //Debug.Log("Invoked");
@@ -132,7 +132,7 @@ public class Player : MonoBehaviour
     }
 
 
-    private void SetSelectedCounter(ClearCounter selectedCounter)
+    private void SetSelectedCounter(BaseCounter selectedCounter)
     {
         this.selectedCounter = selectedCounter;
 

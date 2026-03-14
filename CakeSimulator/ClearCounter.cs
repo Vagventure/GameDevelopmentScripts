@@ -1,10 +1,9 @@
 using UnityEngine;
 
-public class ClearCounter : MonoBehaviour
+public class ClearCounter : BaseCounter
 {
     [SerializeField] private KitchenObjectsSO spawnObject;
-    [SerializeField] private Transform counterTopPosition;
-
+    
     private KitchenObjects kitchenObject;
    public void Interact()
     {
