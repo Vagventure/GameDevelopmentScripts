@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IKitchenObjectParent
 {
     public static Player Instance { get; private set; }
     public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
@@ -21,6 +21,8 @@ public class Player : MonoBehaviour
     private bool isWalking;
     private Vector3 lastInteraction;
     private BaseCounter selectedCounter;
+   
+    [SerializeField] private Transform objectHoldPoint;
 
     private void Start()
     {
@@ -40,7 +42,7 @@ public class Player : MonoBehaviour
     {
         if (selectedCounter != null)
         {
-           selectedCounter.Interact();
+           selectedCounter.Interact(this);
         }
     }
 
@@ -142,5 +144,18 @@ public class Player : MonoBehaviour
         });
     }
 
-  
+    public Transform GetObjectFollowTransform()
+    {
+        return objectHoldPoint;
+    }
+
+    public KitchenObjects SpawnKitchenObject()
+    {
+        throw new NotImplementedException();
+    }
+
+    public KitchenObjects SetKitchenObjectParent()
+    {
+        throw new NotImplementedException();
+    }
 }

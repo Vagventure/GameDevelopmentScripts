@@ -1,18 +1,33 @@
 using UnityEngine;
 
-public class ClearCounter : BaseCounter
+public class ClearCounter : BaseCounter, IKitchenObjectParent
 {
     [SerializeField] private KitchenObjectsSO spawnObject;
     
     private KitchenObjects kitchenObject;
-   public void Interact()
+
+    public override void Interact(Player player)
     {
         if(kitchenObject == null)
         {
-            Debug.Log("Interaction Performed");
-            kitchenObject =  KitchenObjects.SpawnKitchenObject(spawnObject,counterTopPosition);
+            
 
         }
 
+    }
+
+    public KitchenObjects SetKitchenObjectParent()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public KitchenObjects SpawnKitchenObject()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public Transform GetObjectFollowTransform()
+    {
+        return counterTopPosition;
     }
 }

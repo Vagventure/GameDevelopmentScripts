@@ -4,5 +4,7 @@ public class BaseCounter : MonoBehaviour
 {
     [SerializeField] public Transform counterTopPosition;
 
-    public void Interact(){}
+    public virtual void Interact(Player player){}
+
+  
 }
