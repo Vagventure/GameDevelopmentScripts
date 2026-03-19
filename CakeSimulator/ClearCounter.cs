@@ -8,9 +8,31 @@ public class ClearCounter : BaseCounter, IKitchenObjectParent
 
     public override void Interact(Player player)
     {
-        if(kitchenObject == null)
+        if (HasKitchenObject())
         {
-            
+            if (player.HasKitchenObject())
+            {
+                //Don't do anything
+            }
+            else
+            {
+                //Give object to player
+                GetKitchenObjects().SetKitchenObjectParent(player);
+                
+            }
+
+        }
+        else
+        {
+            if (player.HasKitchenObject())
+            {
+                //Place object on the counter
+                player.GetKitchenObjects().SetKitchenObjectParent(this);
+            }
+            else
+            {
+                //Do nothing
+            }
 
         }
 
@@ -29,5 +51,25 @@ public class ClearCounter : BaseCounter, IKitchenObjectParent
     public Transform GetObjectFollowTransform()
     {
         return counterTopPosition;
+    }
+
+   public bool HasKitchenObject()
+    {
+        return kitchenObject != null;
+    }
+
+    public KitchenObjects GetKitchenObjects()
+    {
+        return kitchenObject;
+    }
+
+    public void SetKitchenObject(KitchenObjects kitchenObj)
+    {
+        this.kitchenObject = kitchenObj;
+    }
+
+    public void ClearKitchenObject()
+    {
+        kitchenObject = null;
     }
 }

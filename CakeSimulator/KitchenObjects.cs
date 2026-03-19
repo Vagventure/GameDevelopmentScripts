@@ -19,8 +19,14 @@ public class KitchenObjects : MonoBehaviour
 
    public void SetKitchenObjectParent(IKitchenObjectParent kitchenObjectParent)
     {
+        if(this.kitchenObjectParent != null)
+        {
+            this.kitchenObjectParent.ClearKitchenObject();
+        }
       
         this.kitchenObjectParent = kitchenObjectParent;
+
+        kitchenObjectParent.SetKitchenObject(this);
 
         transform.parent = kitchenObjectParent.GetObjectFollowTransform();
         transform.localPosition = Vector3.zero;

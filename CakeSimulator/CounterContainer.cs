@@ -4,14 +4,14 @@ public class CounterContainer : BaseCounter, IKitchenObjectParent
 {
     [SerializeField] private KitchenObjectsSO spawnObject;
 
-    private KitchenObjects kitchenObject;
-
+    
     public override void Interact(Player player)
     {
-        if (kitchenObject == null)
+        if (!player.HasKitchenObject())
         {
             Debug.Log("Interaction Performed");
-            kitchenObject = KitchenObjects.SpawnKitchenObject(spawnObject, player);
+            KitchenObjects spawnObj =  KitchenObjects.SpawnKitchenObject(spawnObject, player);
+            player.SetKitchenObject(spawnObj);
 
         }
 
@@ -30,5 +30,25 @@ public class CounterContainer : BaseCounter, IKitchenObjectParent
     public Transform GetObjectFollowTransform()
     {
         return counterTopPosition;
+    }
+
+    public bool HasKitchenObject()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public KitchenObjects GetKitchenObjects()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void SetKitchenObject(KitchenObjects kitchenObject)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void ClearKitchenObject()
+    {
+        throw new System.NotImplementedException();
     }
 }

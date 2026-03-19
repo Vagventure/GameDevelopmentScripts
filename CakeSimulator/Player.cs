@@ -21,7 +21,9 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     private bool isWalking;
     private Vector3 lastInteraction;
     private BaseCounter selectedCounter;
-   
+    private KitchenObjects kitchenObject;
+  
+
     [SerializeField] private Transform objectHoldPoint;
 
     private void Start()
@@ -60,12 +62,12 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     private void HandleMovement()
     {
         Vector2 inputVector = input.PlayerInputNormalised();
-        Vector3 newMov = new Vector3(inputVector.x, 0f, inputVector.y);
+        Vector3  newMov = new Vector3(inputVector.x, 0f, inputVector.y);
         isWalking = newMov != Vector3.zero;
 
-        float moveDistance = moveSpeed * Time.deltaTime;
+        float moveDistance = Mathf.Min(moveSpeed * Time.deltaTime);
         bool canMove = !Physics.CapsuleCast(transform.position,transform.position + Vector3.up * playerHeight, playerRadius, newMov ,moveDistance);
-
+     
         if (!canMove)
         {
             Vector3 movDirX = new Vector3(0, 0, newMov.z).normalized;
@@ -133,7 +135,33 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         }
     }
 
+    //private void OnDrawGizmos()
+    //{
+    //    if (!Application.isPlaying) return;
 
+    //    Gizmos.color = Color.red;
+
+    //    float moveDistance = moveSpeed * Time.deltaTime;
+
+    //    Vector3 point1 = transform.position + Vector3.up * playerRadius;
+    //    Vector3 point2 = transform.position + Vector3.up * (playerHeight - playerRadius);
+    //    Vector3 direction = newMov.normalized;
+
+    //    // Start capsule
+    //    Gizmos.DrawWireSphere(point1, playerRadius);
+    //    Gizmos.DrawWireSphere(point2, playerRadius);
+
+    //    // End capsule
+    //    Vector3 end1 = point1 + direction * moveDistance;
+    //    Vector3 end2 = point2 + direction * moveDistance;
+
+    //    Gizmos.DrawWireSphere(end1, playerRadius);
+    //    Gizmos.DrawWireSphere(end2, playerRadius);
+
+    //    // Lines
+    //    Gizmos.DrawLine(point1, end1);
+    //    Gizmos.DrawLine(point2, end2);
+    //}
     private void SetSelectedCounter(BaseCounter selectedCounter)
     {
         this.selectedCounter = selectedCounter;
@@ -157,5 +185,26 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     public KitchenObjects SetKitchenObjectParent()
     {
         throw new NotImplementedException();
+    }
+
+    public bool HasKitchenObject()
+    {
+        return kitchenObject != null;
+     
+    }
+
+    public KitchenObjects GetKitchenObjects()
+    {
+        return kitchenObject;
+    }
+
+    public void SetKitchenObject(KitchenObjects kitchenObject)
+    {
+        this.kitchenObject = kitchenObject;
+    }
+
+    public void ClearKitchenObject()
+    {
+        kitchenObject = null;
     }
 }
