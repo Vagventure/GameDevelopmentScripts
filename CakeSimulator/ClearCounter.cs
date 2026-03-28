@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class ClearCounter : BaseCounter, IKitchenObjectParent
 {
-    [SerializeField] private KitchenObjectsSO spawnObject;
     
     private KitchenObjects kitchenObject;
 

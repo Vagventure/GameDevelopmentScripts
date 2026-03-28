@@ -29,7 +29,9 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     private void Start()
     {
         input.OnInteractPerformed += Input_OnInteractPerformed;
+        input.OnAltInteractperformed += Input_OnAltInteractperformed;
     }
+
 
     private void Awake()
     {
@@ -45,6 +47,14 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         if (selectedCounter != null)
         {
            selectedCounter.Interact(this);
+        }
+    }
+
+    private void Input_OnAltInteractperformed(object sender, EventArgs e)
+    {
+        if(selectedCounter != null)
+        {
+            selectedCounter.AltInteract(this);
         }
     }
 

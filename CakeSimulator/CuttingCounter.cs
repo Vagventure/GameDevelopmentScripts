@@ -2,8 +2,7 @@ using UnityEngine;
 
 public class CuttingCounter : BaseCounter, IKitchenObjectParent
 {
-    [SerializeField] private KitchenObjectsSO spawnObject;
-
+  
     private KitchenObjects kitchenObject;
 
     public override void Interact(Player player)
@@ -38,6 +37,21 @@ public class CuttingCounter : BaseCounter, IKitchenObjectParent
 
     }
 
+    public override void AltInteract(Player player)
+    {
+        if (HasKitchenObject())
+        {
+            if (player.HasKitchenObject())
+            {
+                //Do nothing counter alrready has an object and the player as well
+            }
+            else
+            {
+                //Peform cut operation
+                Debug.Log("Cut performed");
+            }
+        }
+    }
     public KitchenObjects SetKitchenObjectParent()
     {
         throw new System.NotImplementedException();
