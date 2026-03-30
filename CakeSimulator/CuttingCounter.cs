@@ -5,6 +5,9 @@ public class CuttingCounter : BaseCounter, IKitchenObjectParent
   
     private KitchenObjects kitchenObject;
 
+    private int cutProgress;
+    [SerializeField] private CutKitchenObjectsSO[] cutKitchenObjectsSOs;
+
     public override void Interact(Player player)
     {
         if (HasKitchenObject())
@@ -27,6 +30,7 @@ public class CuttingCounter : BaseCounter, IKitchenObjectParent
             {
                 //Place object on the counter
                 player.GetKitchenObjects().SetKitchenObjectParent(this);
+                cutProgress = 0;
             }
             else
             {
@@ -39,7 +43,7 @@ public class CuttingCounter : BaseCounter, IKitchenObjectParent
 
     public override void AltInteract(Player player)
     {
-        if (HasKitchenObject())
+        if (HasKitchenObject() && HasRecipeSOWithInput(kitchenObject.GetKitchenObjectsSO()))
         {
             if (player.HasKitchenObject())
             {
@@ -48,9 +52,47 @@ public class CuttingCounter : BaseCounter, IKitchenObjectParent
             else
             {
                 //Peform cut operation
-                Debug.Log("Cut performed");
+                cutProgress++;
+                CutKitchenObjectsSO cutKitchenObjectsSO = GetCuttingRecipeSOWithInput(kitchenObject.GetKitchenObjectsSO());
+
+                if(cutProgress >= cutKitchenObjectsSO.maxCutCount)
+                {
+                    kitchenObject.DestroySelf();
+                    KitchenObjects.SpawnKitchenObject(cutKitchenObjectsSO.output,this);
+                    cutProgress = 0;
+                }
+
+                
             }
         }
+    }
+
+    public CutKitchenObjectsSO GetCuttingRecipeSOWithInput(KitchenObjectsSO inputKitchenObjectSO)
+    {
+        foreach (CutKitchenObjectsSO cutKitchenObject in cutKitchenObjectsSOs) 
+        {
+            if(cutKitchenObject.input == inputKitchenObjectSO)
+            {
+                return cutKitchenObject;
+            }
+        }
+        return null;
+ 
+
+    }
+
+    public bool HasRecipeSOWithInput(KitchenObjectsSO inputKitchenObjectSO)
+    {
+        foreach (CutKitchenObjectsSO cutKitchenObject in cutKitchenObjectsSOs)
+        {
+            if (cutKitchenObject.input == inputKitchenObjectSO)
+            {
+                return true;
+            }
+        }
+        return false;
+
+
     }
     public KitchenObjects SetKitchenObjectParent()
     {

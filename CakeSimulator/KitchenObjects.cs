@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class KitchenObjects : MonoBehaviour
 {
-
+   [SerializeField] private KitchenObjectsSO kitchenObjectsSO;
    private IKitchenObjectParent kitchenObjectParent;
    public static KitchenObjects SpawnKitchenObject(KitchenObjectsSO kitchenObjectsSO, IKitchenObjectParent kitchenObjectParent)
     {
@@ -38,5 +38,10 @@ public class KitchenObjects : MonoBehaviour
     {
         kitchenObjectParent.ClearKitchenObject();
         Destroy(gameObject);
+    }
+
+    public KitchenObjectsSO GetKitchenObjectsSO()
+    {
+        return kitchenObjectsSO;
     }
 }
