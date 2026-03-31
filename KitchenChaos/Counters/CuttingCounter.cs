@@ -6,6 +6,7 @@ public class CuttingCounter : BaseCounter, IProgressBar
 {
     public event EventHandler<IProgressBar.OnProgressChangedEventArgs> OnProgressChanged;
     public event EventHandler OnCut;
+    public static event EventHandler OnAnyCut;
    
     [SerializeField] private CuttingRecipeSO[] cuttingRecipeSO;
 
@@ -58,6 +59,7 @@ public class CuttingCounter : BaseCounter, IProgressBar
             });
 
             OnCut?.Invoke(this, EventArgs.Empty);
+            OnAnyCut?.Invoke(this, EventArgs.Empty);
 
             if (cuttingProgress >= cuttingRecipeSO.numOfCuts)
             {

@@ -1,9 +1,10 @@
 using System;
 using UnityEngine;
 
-public class PlayerControl : BaseCounter, IKitchenObjectParent
+public class PlayerControl : MonoBehaviour, IKitchenObjectParent
 {
     public static PlayerControl Instance { get; private set; }
+    public event EventHandler OnPickedSomething;
 
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float rotationSpeed = 10f;
@@ -148,6 +149,7 @@ public class PlayerControl : BaseCounter, IKitchenObjectParent
 
     }
 
+
     private void SetSelectedCounter(BaseCounter selectedCounter)
     {
         this.selectedCounter = selectedCounter;
@@ -156,6 +158,36 @@ public class PlayerControl : BaseCounter, IKitchenObjectParent
         {
             selectedCounter = selectedCounter
         });
+    }
+
+    public Transform GetKitchenObjectFollowTransform()
+    {
+        return playerObjHoldPoint;
+    }
+
+
+    public void SetkitchenObject(KitchenObjects kitchenObj)
+    {
+        this.kitchenObj = kitchenObj;
+
+        if (kitchenObj != null)
+        {
+            OnPickedSomething?.Invoke(this, EventArgs.Empty);
+        }
+    }
+    public KitchenObjects GetKitchenObject()
+    {
+        return kitchenObj;
+    }
+
+    public void ClearKitchenObject()
+    {
+        kitchenObj = null;
+    }
+
+    public bool HasKitchenobject()
+    {
+        return kitchenObj != null;
     }
 
 }
