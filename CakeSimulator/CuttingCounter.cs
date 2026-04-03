@@ -1,8 +1,13 @@
+using System;
 using UnityEngine;
 
 public class CuttingCounter : BaseCounter, IKitchenObjectParent
 {
-  
+    public event EventHandler<OnProgressChangedEventArgs> OnProgressChanged;
+    public class OnProgressChangedEventArgs : EventArgs
+    {
+        public float progressNormaliazed;
+    }
     private KitchenObjects kitchenObject;
 
     private int cutProgress;
@@ -26,15 +31,23 @@ public class CuttingCounter : BaseCounter, IKitchenObjectParent
         }
         else
         {
-            if (player.HasKitchenObject())
+            foreach (CutKitchenObjectsSO cutKitchenObjects in cutKitchenObjectsSOs)
             {
-                //Place object on the counter
-                player.GetKitchenObjects().SetKitchenObjectParent(this);
-                cutProgress = 0;
-            }
-            else
-            {
-                //Do nothing
+                if(cutKitchenObjects.input == player.GetKitchenObjects().GetKitchenObjectsSO())
+                {
+                    if (player.HasKitchenObject())
+                    {
+                        //Place object on the counter
+                        player.GetKitchenObjects().SetKitchenObjectParent(this);
+                        cutProgress = 0;
+                    }
+                    else
+                    {
+                        //Do nothing
+                    }
+                    break;
+                }
+               
             }
 
         }
@@ -54,12 +67,20 @@ public class CuttingCounter : BaseCounter, IKitchenObjectParent
                 //Peform cut operation
                 cutProgress++;
                 CutKitchenObjectsSO cutKitchenObjectsSO = GetCuttingRecipeSOWithInput(kitchenObject.GetKitchenObjectsSO());
+                OnProgressChanged?.Invoke(this, new OnProgressChangedEventArgs
+                {
+                    progressNormaliazed = (float)cutProgress / cutKitchenObjectsSO.maxCutCount
+                });
 
-                if(cutProgress >= cutKitchenObjectsSO.maxCutCount)
+                if (cutProgress >= cutKitchenObjectsSO.maxCutCount)
                 {
                     kitchenObject.DestroySelf();
                     KitchenObjects.SpawnKitchenObject(cutKitchenObjectsSO.output,this);
                     cutProgress = 0;
+                    OnProgressChanged?.Invoke(this, new OnProgressChangedEventArgs
+                    {
+                        progressNormaliazed = (float)cutProgress / cutKitchenObjectsSO.maxCutCount
+                    });
                 }
 
                 

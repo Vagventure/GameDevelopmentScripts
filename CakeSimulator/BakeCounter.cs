@@ -1,9 +1,65 @@
+using System;
 using UnityEngine;
 
 public class BakeCounter : BaseCounter, IKitchenObjectParent
 {
+    public event EventHandler<OnBakingEventsArgs> OnBaking;
+    public class OnBakingEventsArgs : EventArgs
+    {
+        public bool isBaking;
+    }
     [SerializeField] private GameObject microLight;
     private KitchenObjects kitchenObject;
+
+    public enum State
+    {
+        Idle,
+        Baking,
+        Burning,
+        Burned
+
+    }
+
+    private State state;  
+
+    private void Start()
+    {
+        state = State.Idle;
+    }
+
+    private void Update()
+    {
+        switch (state) {
+        
+            case State.Idle:
+                OnBaking?.Invoke(this, new OnBakingEventsArgs
+                {
+                    isBaking = false
+                });
+                break;
+
+            case State.Baking:
+                OnBaking?.Invoke(this, new OnBakingEventsArgs
+                {
+                    isBaking = true
+                });
+                break;
+
+            case State.Burning:
+                OnBaking?.Invoke(this, new OnBakingEventsArgs
+                {
+                    isBaking = true
+                });
+                break;
+
+            case State.Burned:
+                OnBaking?.Invoke(this, new OnBakingEventsArgs
+                {
+                    isBaking = false
+                });
+                break;
+        }
+    }
 
     public override void Interact(Player player)
     {
@@ -17,8 +73,8 @@ public class BakeCounter : BaseCounter, IKitchenObjectParent
             {
                 //Give object to player
                 GetKitchenObjects().SetKitchenObjectParent(player);
-                microLight.SetActive(false);
-
+                state  = State.Idle;
+               
             }
 
         }
@@ -28,7 +84,8 @@ public class BakeCounter : BaseCounter, IKitchenObjectParent
             {
                 //Place object on the counter
                 player.GetKitchenObjects().SetKitchenObjectParent(this);
-                microLight.SetActive(true);
+                state = State.Baking;
+               
             }
             else
             {
