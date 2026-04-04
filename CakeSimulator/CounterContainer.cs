@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class CounterContainer : BaseCounter, IKitchenObjectParent
+public class CounterContainer : BaseCounter
 {
     public event EventHandler OnInteractionPerformed;
     [SerializeField] private KitchenObjectsSO spawnObject;
@@ -21,38 +21,4 @@ public class CounterContainer : BaseCounter, IKitchenObjectParent
 
     }
 
-    public KitchenObjects SetKitchenObjectParent()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public KitchenObjects SpawnKitchenObject()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public Transform GetObjectFollowTransform()
-    {
-        return counterTopPosition;
-    }
-
-    public bool HasKitchenObject()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public KitchenObjects GetKitchenObjects()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void SetKitchenObject(KitchenObjects kitchenObject)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void ClearKitchenObject()
-    {
-        throw new System.NotImplementedException();
-    }
 }

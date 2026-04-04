@@ -1,10 +1,8 @@
 using UnityEngine;
 
-public class ClearCounter : BaseCounter, IKitchenObjectParent
+public class ClearCounter : BaseCounter
 {
     
-    private KitchenObjects kitchenObject;
-
     public override void Interact(Player player)
     {
         if (HasKitchenObject())
@@ -37,38 +35,5 @@ public class ClearCounter : BaseCounter, IKitchenObjectParent
 
     }
 
-    public KitchenObjects SetKitchenObjectParent()
-    {
-        throw new System.NotImplementedException();
-    }
 
-    public KitchenObjects SpawnKitchenObject()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public Transform GetObjectFollowTransform()
-    {
-        return counterTopPosition;
-    }
-
-   public bool HasKitchenObject()
-    {
-        return kitchenObject != null;
-    }
-
-    public KitchenObjects GetKitchenObjects()
-    {
-        return kitchenObject;
-    }
-
-    public void SetKitchenObject(KitchenObjects kitchenObj)
-    {
-        this.kitchenObject = kitchenObj;
-    }
-
-    public void ClearKitchenObject()
-    {
-        kitchenObject = null;
-    }
 }

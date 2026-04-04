@@ -1,15 +1,19 @@
 using System;
 using UnityEngine;
+//using static IProgressBar;
 
-public class BakeCounter : BaseCounter, IKitchenObjectParent
+public class BakeCounter : BaseCounter, IProgressBar
 {
-    public event EventHandler<OnBakingEventsArgs> OnBaking;
-    public class OnBakingEventsArgs : EventArgs
+    public event EventHandler<IProgressBar.OnProgressChangedEventArgs> OnProgressChanged;
+    public event EventHandler<OnMicrowaveStateChangedEventArgs> OnMicrowaveStateChanged;
+    public class OnMicrowaveStateChangedEventArgs : EventArgs
     {
-        public bool isBaking;
+        public State state;
     }
-    [SerializeField] private GameObject microLight;
-    private KitchenObjects kitchenObject;
+ 
+    [SerializeField] private BakingRecipeSO bakingRecipeSO;
+    private float bakeTimer;
+    private float burnTimer;
 
     public enum State
     {
@@ -20,7 +24,8 @@ public class BakeCounter : BaseCounter, IKitchenObjectParent
 
     }
 
-    private State state;  
+    private State state;
+
 
     private void Start()
     {
@@ -32,31 +37,46 @@ public class BakeCounter : BaseCounter, IKitchenObjectParent
         switch (state) {
         
             case State.Idle:
-                OnBaking?.Invoke(this, new OnBakingEventsArgs
-                {
-                    isBaking = false
-                });
                 break;
 
             case State.Baking:
-                OnBaking?.Invoke(this, new OnBakingEventsArgs
+                OnMicrowaveStateChanged?.Invoke(this, new OnMicrowaveStateChangedEventArgs
                 {
-                    isBaking = true
+                    state = state
                 });
+                bakeTimer += Time.deltaTime;
+                float bakeTimerMax = bakingRecipeSO.bakeTimer;
+                if(bakeTimer < bakeTimerMax)
+                {
+                    float bakeProgress = bakeTimer / bakeTimerMax;
+                    OnProgressChanged?.Invoke(this, new IProgressBar.OnProgressChangedEventArgs
+                    {
+                        progressNormaliazed = bakeProgress
+                    });
+
+                }
+                
                 break;
 
             case State.Burning:
-                OnBaking?.Invoke(this, new OnBakingEventsArgs
+                OnMicrowaveStateChanged?.Invoke(this, new OnMicrowaveStateChangedEventArgs
                 {
-                    isBaking = true
+                    state = state
                 });
+                burnTimer += Time.deltaTime;
+                float burnTimerMax = bakingRecipeSO.bakeTimer;
+                if (burnTimer < burnTimerMax)
+                {
+                    float bakeProgress = burnTimer / burnTimerMax;
+                    OnProgressChanged?.Invoke(this, new IProgressBar.OnProgressChangedEventArgs
+                    {
+                        progressNormaliazed = bakeProgress
+                    });
+
+                }
                 break;
 
             case State.Burned:
-                OnBaking?.Invoke(this, new OnBakingEventsArgs
-                {
-                    isBaking = false
-                });
                 break;
         }
     }
@@ -96,38 +116,5 @@ public class BakeCounter : BaseCounter, IKitchenObjectParent
 
     }
 
-    public KitchenObjects SetKitchenObjectParent()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public KitchenObjects SpawnKitchenObject()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public Transform GetObjectFollowTransform()
-    {
-        return counterTopPosition;
-    }
-
-    public bool HasKitchenObject()
-    {
-        return kitchenObject != null;
-    }
-
-    public KitchenObjects GetKitchenObjects()
-    {
-        return kitchenObject;
-    }
-
-    public void SetKitchenObject(KitchenObjects kitchenObj)
-    {
-        this.kitchenObject = kitchenObj;
-    }
-
-    public void ClearKitchenObject()
-    {
-        kitchenObject = null;
-    }
+   
 }

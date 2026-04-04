@@ -1,18 +1,15 @@
 using System;
 using UnityEngine;
 
-public class CuttingCounter : BaseCounter, IKitchenObjectParent
+public class CuttingCounter : BaseCounter, IProgressBar
 {
-    public event EventHandler<OnProgressChangedEventArgs> OnProgressChanged;
-    public class OnProgressChangedEventArgs : EventArgs
-    {
-        public float progressNormaliazed;
-    }
-    private KitchenObjects kitchenObject;
+    public event EventHandler<IProgressBar.OnProgressChangedEventArgs> OnProgressChanged;
+    
 
     private int cutProgress;
     [SerializeField] private CutKitchenObjectsSO[] cutKitchenObjectsSOs;
 
+   
     public override void Interact(Player player)
     {
         if (HasKitchenObject())
@@ -67,7 +64,7 @@ public class CuttingCounter : BaseCounter, IKitchenObjectParent
                 //Peform cut operation
                 cutProgress++;
                 CutKitchenObjectsSO cutKitchenObjectsSO = GetCuttingRecipeSOWithInput(kitchenObject.GetKitchenObjectsSO());
-                OnProgressChanged?.Invoke(this, new OnProgressChangedEventArgs
+                OnProgressChanged?.Invoke(this, new IProgressBar.OnProgressChangedEventArgs
                 {
                     progressNormaliazed = (float)cutProgress / cutKitchenObjectsSO.maxCutCount
                 });
@@ -77,7 +74,7 @@ public class CuttingCounter : BaseCounter, IKitchenObjectParent
                     kitchenObject.DestroySelf();
                     KitchenObjects.SpawnKitchenObject(cutKitchenObjectsSO.output,this);
                     cutProgress = 0;
-                    OnProgressChanged?.Invoke(this, new OnProgressChangedEventArgs
+                    OnProgressChanged?.Invoke(this, new IProgressBar.OnProgressChangedEventArgs
                     {
                         progressNormaliazed = (float)cutProgress / cutKitchenObjectsSO.maxCutCount
                     });
@@ -115,38 +112,5 @@ public class CuttingCounter : BaseCounter, IKitchenObjectParent
 
 
     }
-    public KitchenObjects SetKitchenObjectParent()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public KitchenObjects SpawnKitchenObject()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public Transform GetObjectFollowTransform()
-    {
-        return counterTopPosition;
-    }
-
-    public bool HasKitchenObject()
-    {
-        return kitchenObject != null;
-    }
-
-    public KitchenObjects GetKitchenObjects()
-    {
-        return kitchenObject;
-    }
-
-    public void SetKitchenObject(KitchenObjects kitchenObj)
-    {
-        this.kitchenObject = kitchenObj;
-    }
-
-    public void ClearKitchenObject()
-    {
-        kitchenObject = null;
-    }
+   
 }

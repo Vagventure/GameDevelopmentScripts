@@ -9,12 +9,13 @@ public class BakeCounter_Visual : MonoBehaviour
     private void Start()
     {
         bakeCounter = counterWithOven.GetComponent<BakeCounter>();
-
-        bakeCounter.OnBaking += BakeCounter_OnBaking;
+        bakeCounter.OnMicrowaveStateChanged += BakeCounter_OnMicrowaveStateChanged;
+      
     }
 
-    private void BakeCounter_OnBaking(object sender, BakeCounter.OnBakingEventsArgs e)
+    private void BakeCounter_OnMicrowaveStateChanged(object sender, BakeCounter.OnMicrowaveStateChangedEventArgs e)
     {
-        microLight.SetActive(e.isBaking);
+        bool isBaking = e.state == BakeCounter.State.Baking || e.state == BakeCounter.State.Burning;
+        gameObject.SetActive(isBaking);
     }
 }

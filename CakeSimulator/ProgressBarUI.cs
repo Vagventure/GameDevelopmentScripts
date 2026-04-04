@@ -6,18 +6,18 @@ public class ProgressBarUI : MonoBehaviour
     [SerializeField] private GameObject objectWithProgressBar;
     [SerializeField] private Image bar;
 
-    private CuttingCounter progressBar;
+    private IProgressBar progressBar;
     private void Start()
     {
-        progressBar = objectWithProgressBar.GetComponent<CuttingCounter>();
+        progressBar = objectWithProgressBar.GetComponent<IProgressBar>();
         progressBar.OnProgressChanged += ProgressBar_OnProgressChanged;
-
+     
         bar.fillAmount = 0;
 
         Hide();
     }
 
-    private void ProgressBar_OnProgressChanged(object sender, CuttingCounter.OnProgressChangedEventArgs e)
+    private void ProgressBar_OnProgressChanged(object sender, IProgressBar.OnProgressChangedEventArgs e)
     {
         bar.fillAmount = e.progressNormaliazed;
         if (e.progressNormaliazed == 0 ||  e.progressNormaliazed == 1)
