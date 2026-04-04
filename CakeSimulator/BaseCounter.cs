@@ -1,17 +1,17 @@
 using UnityEngine;
 
-public class BaseCounter : IKitchenObjectParent
+public class BaseCounter : MonoBehaviour, IKitchenObjectParent
 {
     [SerializeField] public Transform counterTopPosition;
 
-    public KitchenObjects kitchenObject;
+    private KitchenObjects kitchenObject;
     public virtual void Interact(Player player){}
     public virtual void AltInteract(Player player) {}
 
 
-    public KitchenObjects SetKitchenObjectParent()
+    public void SetKitchenObjectParent(KitchenObjects kitchenObject)
     {
-        throw new System.NotImplementedException();
+        this.kitchenObject = kitchenObject;
     }
 
     public KitchenObjects SpawnKitchenObject()

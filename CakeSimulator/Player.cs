@@ -192,9 +192,9 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         throw new NotImplementedException();
     }
 
-    public KitchenObjects SetKitchenObjectParent()
+    public void SetKitchenObjectParent(KitchenObjects kitchenObjects)
     {
-        throw new NotImplementedException();
+        kitchenObject = kitchenObjects;
     }
 
     public bool HasKitchenObject()

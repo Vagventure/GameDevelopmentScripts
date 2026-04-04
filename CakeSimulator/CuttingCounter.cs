@@ -53,7 +53,7 @@ public class CuttingCounter : BaseCounter, IProgressBar
 
     public override void AltInteract(Player player)
     {
-        if (HasKitchenObject() && HasRecipeSOWithInput(kitchenObject.GetKitchenObjectsSO()))
+        if (HasKitchenObject() && HasRecipeSOWithInput(GetKitchenObjects().GetKitchenObjectsSO()))
         {
             if (player.HasKitchenObject())
             {
@@ -63,7 +63,7 @@ public class CuttingCounter : BaseCounter, IProgressBar
             {
                 //Peform cut operation
                 cutProgress++;
-                CutKitchenObjectsSO cutKitchenObjectsSO = GetCuttingRecipeSOWithInput(kitchenObject.GetKitchenObjectsSO());
+                CutKitchenObjectsSO cutKitchenObjectsSO = GetCuttingRecipeSOWithInput(GetKitchenObjects().GetKitchenObjectsSO());
                 OnProgressChanged?.Invoke(this, new IProgressBar.OnProgressChangedEventArgs
                 {
                     progressNormaliazed = (float)cutProgress / cutKitchenObjectsSO.maxCutCount
@@ -71,7 +71,7 @@ public class CuttingCounter : BaseCounter, IProgressBar
 
                 if (cutProgress >= cutKitchenObjectsSO.maxCutCount)
                 {
-                    kitchenObject.DestroySelf();
+                    GetKitchenObjects().DestroySelf();
                     KitchenObjects.SpawnKitchenObject(cutKitchenObjectsSO.output,this);
                     cutProgress = 0;
                     OnProgressChanged?.Invoke(this, new IProgressBar.OnProgressChangedEventArgs
