@@ -16,6 +16,6 @@ public class BakeCounter_Visual : MonoBehaviour
     private void BakeCounter_OnMicrowaveStateChanged(object sender, BakeCounter.OnMicrowaveStateChangedEventArgs e)
     {
         bool isBaking = e.state == BakeCounter.State.Baking || e.state == BakeCounter.State.Burning;
-        gameObject.SetActive(isBaking);
+        microLight.SetActive(isBaking);
     }
 }
