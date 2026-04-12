@@ -15,11 +15,18 @@ public class PlateKitchenObject_Visual : MonoBehaviour
     [SerializeField] private PlateKitchenObject plateKitchenObject;
     [SerializeField] private List<kitchenObjectSO_GameObject> kitchenObjectSOGameObjectList;
 
- 
+    private void Awake()
+    {
+        plateKitchenObject = GetComponentInParent<PlateKitchenObject>();
+    }
+
     private void Start()
     {
-        plateKitchenObject.OnIngredientAdded += PlateKitchenObject_OnIngredientAdded;
-
+        if (plateKitchenObject == null)
+        {
+            Debug.LogError("PlateKitchenObject is NULL!");
+            return;
+        }
         foreach (kitchenObjectSO_GameObject kitchenObjectSO_GameObject in kitchenObjectSOGameObjectList)
         {
             kitchenObjectSO_GameObject.gameObject.SetActive(false);
@@ -30,10 +37,18 @@ public class PlateKitchenObject_Visual : MonoBehaviour
     {
        foreach(kitchenObjectSO_GameObject kitchenObjectSO_GameObject in kitchenObjectSOGameObjectList)
        {
+            Debug.Log("Loop ran");
             if(kitchenObjectSO_GameObject.kitchenObjectsSO == e.kitchenObjectsSO)
             {
+                Debug.Log("if ran");
+
                 kitchenObjectSO_GameObject.gameObject.SetActive(true);
             }
-       }
+            else
+            {
+                Debug.Log("else ran");
+
+            }
+        }
     }
 }
