@@ -37,4 +37,9 @@ public class PlateKitchenObject : KitchenObjects
         });
         return true;
     }
+
+    public int GetIngredientCount()
+    {
+        return kitchenPlateObjectsList.Count;
+    }
 }

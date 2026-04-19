@@ -27,6 +27,8 @@ public class PlateKitchenObject_Visual : MonoBehaviour
             Debug.LogError("PlateKitchenObject is NULL!");
             return;
         }
+
+        plateKitchenObject.OnIngredientAdded += PlateKitchenObject_OnIngredientAdded;
         foreach (kitchenObjectSO_GameObject kitchenObjectSO_GameObject in kitchenObjectSOGameObjectList)
         {
             kitchenObjectSO_GameObject.gameObject.SetActive(false);

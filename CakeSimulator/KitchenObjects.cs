@@ -45,7 +45,9 @@ public class KitchenObjects : MonoBehaviour
             plateKitchenObject = null;
             return false;
         }
+
     }
+
 
     public void DestroySelf()
     {

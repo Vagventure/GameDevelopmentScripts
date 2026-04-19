@@ -52,8 +52,15 @@ public class BakeCounter : BaseCounter, IProgressBar
                 });
                 if (bakeTimer > bakeTimerMax)
                 {
-                    GetKitchenObjects().DestroySelf();
-                    KitchenObjects.SpawnKitchenObject(bakingRecipeSO.bakedCakeBase, this);
+                    if (GetKitchenObjects().TryGetPlate(out PlateKitchenObject plateKitchenObject))
+                    {
+                        if (plateKitchenObject.TryAddIngridient(bakingRecipeSO.bakedCakeBase))
+                        {
+                            //GetKitchenObjects().DestroySelf();
+                        }
+                    }
+                    //GetKitchenObjects().DestroySelf();
+                    //KitchenObjects.SpawnKitchenObject(bakingRecipeSO.bakedCakeBase, this);
                     burnTimer = 0f;
                     state = State.Burning;
                     OnMicrowaveStateChanged?.Invoke(this, new OnMicrowaveStateChangedEventArgs
@@ -79,6 +86,15 @@ public class BakeCounter : BaseCounter, IProgressBar
                 if (burnTimer > burnTimerMax)
                 {
                     state = State.Burned;
+                    if (GetKitchenObjects().TryGetPlate(out PlateKitchenObject plateKitchenObject))
+                    {
+                        if (plateKitchenObject.TryAddIngridient(bakingRecipeSO.bakedCakeBase))
+                        {
+                            //GetKitchenObjects().DestroySelf();
+                        }
+                    }
+                    //GetKitchenObjects().DestroySelf();
+                    //KitchenObjects.SpawnKitchenObject(bakingRecipeSO.overbakedCakeBase, this);
                     OnMicrowaveStateChanged?.Invoke(this, new OnMicrowaveStateChangedEventArgs
                     {
                         state = state
@@ -110,7 +126,8 @@ public class BakeCounter : BaseCounter, IProgressBar
             }
             else
             {
-                //Give object to player
+                //Give it to the player
+            
                 GetKitchenObjects().SetKitchenObjectParent(player);
                 state = State.Idle;
 
@@ -132,21 +149,40 @@ public class BakeCounter : BaseCounter, IProgressBar
             if (player.HasKitchenObject())
             {
                 //Place object on the counter
-                if(player.GetKitchenObjects() == bakingRecipeSO.unBakedCakeBase)
+
+                if (player.GetKitchenObjects().TryGetPlate(out PlateKitchenObject plateKitchenObject))
                 {
-                    player.GetKitchenObjects().SetKitchenObjectParent(this);
-                    bakeTimer = 0f;
-                    state = State.Baking;
-                    OnMicrowaveStateChanged?.Invoke(this, new OnMicrowaveStateChangedEventArgs
+                    if (plateKitchenObject.GetIngredientCount() <= 3)
                     {
-                        state = state
-                    });
+                        plateKitchenObject.SetKitchenObjectParent(this);
+
+                        bakeTimer = 0f;
+                        state = State.Baking;
+                        OnMicrowaveStateChanged?.Invoke(this, new OnMicrowaveStateChangedEventArgs
+                        {
+                            state = state
+                        });
+                    }
                 }
-                
+
+              
+                //if (player.GetKitchenObjects().GetKitchenObjectsSO() == bakingRecipeSO.unBakedCakeBase)
+                //{
+
+                //    player.GetKitchenObjects().SetKitchenObjectParent(this);
+                //    bakeTimer = 0f;
+                //    state = State.Baking;
+                //    OnMicrowaveStateChanged?.Invoke(this, new OnMicrowaveStateChangedEventArgs
+                //    {
+                //        state = state
+                //    });
+                //}
+
             }
             else
             {
                 //Do nothing
+                Debug.Log("Hell");
             }
 
         }
