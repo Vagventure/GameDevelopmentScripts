@@ -63,4 +63,9 @@ public class PlateKitchenObject : KitchenObjects
     {
         return kitchenPlateObjectsList.Count;
     }
+
+    public List<KitchenObjectsSO> GetKitchenObjectsSOList()
+    {
+        return kitchenPlateObjectsList;
+    }
 }

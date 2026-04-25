@@ -39,17 +39,15 @@ public class PlateKitchenObject_Visual : MonoBehaviour
     {
        foreach(kitchenObjectSO_GameObject kitchenObjectSO_GameObject in kitchenObjectSOGameObjectList)
        {
-            Debug.Log("Loop ran");
+            
             if(kitchenObjectSO_GameObject.kitchenObjectsSO == e.kitchenObjectsSO)
             {
-                Debug.Log("if ran");
-
+         
                 kitchenObjectSO_GameObject.gameObject.SetActive(true);
             }
             else
             {
-                Debug.Log("else ran");
-
+              
             }
         }
     }
