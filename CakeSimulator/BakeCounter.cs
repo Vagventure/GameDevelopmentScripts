@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using static IProgressBar;
+using static PlateKitchenObject_Visual;
 //using static IProgressBar;
 
 public class BakeCounter : BaseCounter, IProgressBar
@@ -13,6 +14,7 @@ public class BakeCounter : BaseCounter, IProgressBar
     }
  
     [SerializeField] private BakingRecipeSO bakingRecipeSO;
+    //[SerializeField] private PlateKitchenObject_Visual plateKitchenObject_Visual;
     private float bakeTimer;
     private float burnTimer;
 
@@ -56,7 +58,27 @@ public class BakeCounter : BaseCounter, IProgressBar
                     {
                         if (plateKitchenObject.TryAddIngridient(bakingRecipeSO.bakedCakeBase))
                         {
-                            //GetKitchenObjects().DestroySelf();
+                            Debug.Log(0);
+
+                            var visual = plateKitchenObject.transform.Find("CakeModel").GetComponent<PlateKitchenObject_Visual>();
+
+                            if (visual == null)
+                            {
+                                Debug.LogError("Visual is NULL!");
+                                return;
+                            }
+
+                            foreach (var kitchenObjectsSOGameObject in visual.GetKitchenObjectSOGameObjectList())
+                            {
+                                Debug.Log(1);
+                                if(bakingRecipeSO.unBakedCakeBase == kitchenObjectsSOGameObject.kitchenObjectsSO)
+                                {
+
+                                    kitchenObjectsSOGameObject.gameObject.SetActive(false);
+                                    Debug.Log(kitchenObjectsSOGameObject.gameObject);
+                                    break;
+                                }
+                            }
                         }
                     }
                     //GetKitchenObjects().DestroySelf();

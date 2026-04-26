@@ -51,4 +51,9 @@ public class PlateKitchenObject_Visual : MonoBehaviour
             }
         }
     }
+
+    public List<kitchenObjectSO_GameObject> GetKitchenObjectSOGameObjectList()
+    {
+        return kitchenObjectSOGameObjectList;
+    }
 }
