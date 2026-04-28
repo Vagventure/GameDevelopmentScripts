@@ -73,7 +73,7 @@ public class BakeCounter : BaseCounter, IProgressBar
                                 Debug.Log(1);
                                 if(bakingRecipeSO.unBakedCakeBase == kitchenObjectsSOGameObject.kitchenObjectsSO)
                                 {
-
+                                    plateKitchenObject.GetKitchenObjectsSOList().Remove(bakingRecipeSO.unBakedCakeBase);
                                     kitchenObjectsSOGameObject.gameObject.SetActive(false);
                                     Debug.Log(kitchenObjectsSOGameObject.gameObject);
                                     break;

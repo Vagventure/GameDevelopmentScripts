@@ -15,7 +15,7 @@ public class DeliveryManager : MonoBehaviour
     private float recipeSpawnTimerMax = 4f;
     private int waitingRecipeMax = 4;
     private int recipeDeliveredCount;
-    
+
     private List<RecipeSO> waitingRecipeSOList;
 
     private void Awake()
@@ -37,7 +37,7 @@ public class DeliveryManager : MonoBehaviour
             RecipeSO recipeSO = recipeListSO.recipeSOList[UnityEngine.Random.Range(0, recipeListSO.recipeSOList.Count)];
             waitingRecipeSOList.Add(recipeSO);
 
-            Debug.Log(recipeSO.recipeName);
+            //Debug.Log(recipeSO.recipeName);
             OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
             }
         }
@@ -52,45 +52,47 @@ public class DeliveryManager : MonoBehaviour
             Debug.Log(waitingRecipeSO.kitchenObjectsSOList.Count + "vs" + plateKitchenObject.GetKitchenObjectsSOList().Count);
 
             int waitingRecipeSOCount = waitingRecipeSO.kitchenObjectsSOList.Count;
-            waitingRecipeSOCount++;
 
             if (waitingRecipeSOCount == plateKitchenObject.GetKitchenObjectsSOList().Count)
             {
                 //Debug.Log("1");
-
+                bool ingredientFound = false;
                 bool plateContentsMatchsRecipe = true;
                 foreach(KitchenObjectsSO recipeKitchenObjectsSO in waitingRecipeSO.kitchenObjectsSOList)
                 {
-                    bool ingredientFound = false;
+                     ingredientFound = false;
 
                     foreach(KitchenObjectsSO plateKitchenObjectsSO in plateKitchenObject.GetKitchenObjectsSOList())
                     {
                         if(recipeKitchenObjectsSO == plateKitchenObjectsSO)
                         {
                             //Debug.Log("2");
+                            Debug.Log(recipeKitchenObjectsSO + "vs" + plateKitchenObjectsSO);
 
                             ingredientFound = true;
                             break;
                         }
+                       
                     }
-
                     if (!ingredientFound)
                     {
-                        //Debug.Log("3");
-
                         plateContentsMatchsRecipe = false;
-                    }
-
-                    if (plateContentsMatchsRecipe)
-                    {
-                        Debug.Log("Player delivered the correct recipe");
-                        waitingRecipeSOList.Remove(waitingRecipeSO);
-
-                        recipeDeliveredCount++;
-                        OnRecipeCompleted?.Invoke(this, EventArgs.Empty);
-                        return;
+                        break;
                     }
                 }
+
+
+                if (plateContentsMatchsRecipe)
+                {
+                    Debug.Log("Player delivered the correct recipe");
+                    Debug.Log(waitingRecipeSO);
+                    waitingRecipeSOList.Remove(waitingRecipeSO);
+
+                    recipeDeliveredCount++;
+                    OnRecipeCompleted?.Invoke(this, EventArgs.Empty);
+                    return;
+                }
+
             }
         }
         Debug.Log("Player delivered the wrong item");
