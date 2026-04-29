@@ -2,15 +2,38 @@ using UnityEngine;
 
 public class PlateIconUI : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private PlateKitchenObject plateKitchenObject;
+    [SerializeField] private Transform container;
+    [SerializeField] private Transform iconTemplate;
+
+    private void Awake()
     {
-        
+        iconTemplate.gameObject.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        
+        plateKitchenObject.OnIngredientAdded += PlateKitchenObject_OnIngredientAdded;
+    }
+
+    private void PlateKitchenObject_OnIngredientAdded(object sender, PlateKitchenObject.OnIngredientAddedEventArgs e)
+    {
+        UpdateVisual();
+    }
+
+    private void UpdateVisual()
+    {
+        foreach (Transform child in container)
+        {
+            if (child == iconTemplate) continue;
+            Destroy(child.gameObject);   
+        }
+
+        foreach(KitchenObjectsSO kitchenObjectsSO in plateKitchenObject.GetKitchenObjectsSOList())
+        {
+            Transform iconTransform = Instantiate(iconTemplate,container);
+            iconTransform.gameObject.SetActive(true);
+            iconTransform.GetComponent<PlateIconSingleUI>().SetPlateIconUI(kitchenObjectsSO);
+        }
     }
 }

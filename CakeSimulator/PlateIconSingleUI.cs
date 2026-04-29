@@ -1,16 +1,13 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class PlateIconUI : MonoBehaviour
+public class PlateIconSingleUI : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    [SerializeField] private Image ingredientIcon;
 
-    // Update is called once per frame
-    void Update()
+    public void SetPlateIconUI(KitchenObjectsSO kitchenObjectsSO)
     {
-        
+        ingredientIcon.sprite = kitchenObjectsSO.sprite;
     }
 }
