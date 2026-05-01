@@ -103,4 +103,9 @@ public class DeliveryManager : MonoBehaviour
     {
         return waitingRecipeSOList;
     }
+
+    public int GetRecipeDeliveredCount()
+    {
+        return recipeDeliveredCount;
+    }
 }
