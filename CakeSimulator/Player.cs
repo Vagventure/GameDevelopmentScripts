@@ -6,6 +6,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 {
     public static Player Instance { get; private set; }
     public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
+    public event EventHandler OnPickedSomething;
     public class OnSelectedCounterChangedEventArgs : EventArgs
     {
         public BaseCounter selectedCounter;
@@ -47,6 +48,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         if (selectedCounter != null)
         {
            selectedCounter.Interact(this);
+            OnPickedSomething?.Invoke(this, EventArgs.Empty);
         }
     }
 

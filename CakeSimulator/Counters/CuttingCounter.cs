@@ -4,7 +4,7 @@ using UnityEngine;
 public class CuttingCounter : BaseCounter, IProgressBar
 {
     public event EventHandler<IProgressBar.OnProgressChangedEventArgs> OnProgressChanged;
-    
+    public static event EventHandler OnAnyCut;
 
     private int cutProgress;
     [SerializeField] private CutKitchenObjectsSO[] cutKitchenObjectsSOs;
@@ -68,6 +68,7 @@ public class CuttingCounter : BaseCounter, IProgressBar
                 {
                     progressNormaliazed = (float)cutProgress / cutKitchenObjectsSO.maxCutCount
                 });
+                OnAnyCut?.Invoke(this,EventArgs.Empty);
 
                 if (cutProgress >= cutKitchenObjectsSO.maxCutCount)
                 {

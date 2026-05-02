@@ -7,6 +7,8 @@ public class DeliveryManager : MonoBehaviour
 {
     public event EventHandler OnRecipeSpawned;
     public event EventHandler OnRecipeCompleted;
+    public event EventHandler OnDeliverySuccess;
+    public event EventHandler OnDeliveryFail;
     [SerializeField] private RecipeSOList recipeListSO;
 
     public static DeliveryManager Instance { get; private set; }
@@ -90,12 +92,14 @@ public class DeliveryManager : MonoBehaviour
 
                     recipeDeliveredCount++;
                     OnRecipeCompleted?.Invoke(this, EventArgs.Empty);
+                    OnDeliverySuccess?.Invoke(this, EventArgs.Empty);
                     return;
                 }
 
             }
         }
         Debug.Log("Player delivered the wrong item");
+        OnDeliveryFail?.Invoke(this, EventArgs.Empty);
         //Debug.Log(plateKitchenObject.GetKitchenObjectsSOList().Count + "vs" + waitingRecipeSOList[0].kitchenObjectsSOList.Count);
     }
 
