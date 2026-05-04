@@ -55,6 +55,18 @@ public class OptionsMenuUI : MonoBehaviour
             Hide();
             OnCloseButtonAction();
         });
+
+
+        moveUpButton.onClick.AddListener(() => {RebindBinding(PlayerInput.Binding.Move_Up);});
+        moveDownButton.onClick.AddListener(() => { RebindBinding(PlayerInput.Binding.Move_Down); });
+        moveLeftButton.onClick.AddListener(() => { RebindBinding(PlayerInput.Binding.Move_Left); });
+        moveRightButton.onClick.AddListener(() => { RebindBinding(PlayerInput.Binding.Move_Right); });
+        interactButton.onClick.AddListener(() => { RebindBinding(PlayerInput.Binding.Interact); });
+        altInteractButton.onClick.AddListener(() => { RebindBinding(PlayerInput.Binding.AltIntract); });
+        pauseButton.onClick.AddListener(() => { RebindBinding(PlayerInput.Binding.Pause); });
+        interactControllerButton.onClick.AddListener(() => { RebindBinding(PlayerInput.Binding.Controller_Interact); });
+        altInteractControllerButton.onClick.AddListener(() => { RebindBinding(PlayerInput.Binding.Controller_AltIntract); });
+        pauseControllerButton.onClick.AddListener(() => { RebindBinding(PlayerInput.Binding.Controller_Pause); });
     }
 
     private void Start()
@@ -66,6 +78,7 @@ public class OptionsMenuUI : MonoBehaviour
 
     private void UpdateVisual()
     {
+
         soundEffectsText.text = "Sound Effects : " + Math.Round(SoundEffectsManager.Instance.GetVolume() * 10);
         musicEffectsText.text = "Music Sound : " + Math.Round(MusicManager.Instance.GetVolume() * 10);
 
@@ -101,7 +114,7 @@ public class OptionsMenuUI : MonoBehaviour
         rebindScreenOverlay.SetActive(true);
     }
 
-    public void Rebindbinding(PlayerInput.Binding binding)
+    public void RebindBinding(PlayerInput.Binding binding)
     {
         ShowRebindScreenOverlay();
         PlayerInput.Instance.SetKeyBinding(binding, () =>

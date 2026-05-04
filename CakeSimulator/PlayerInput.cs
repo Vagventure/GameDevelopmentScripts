@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerInput : MonoBehaviour
 {
+    private const string PLAYER_INPUT_BINDINGS = "PlayerInputBindings";
     public static PlayerInput Instance { get; private set; }
     public event EventHandler OnInteractPerformed;
     public event EventHandler OnAltInteractperformed;
@@ -28,6 +29,11 @@ public class PlayerInput : MonoBehaviour
     {
         Instance = this;
         action = new InputSystem_Actions();
+
+        if (PlayerPrefs.HasKey(PLAYER_INPUT_BINDINGS))
+        {
+            action.LoadBindingOverridesFromJson(PlayerPrefs.GetString(PLAYER_INPUT_BINDINGS));
+        }
 
         action.Player.Interact.performed += Interact_performed;
         action.Player.AltInteract.performed += AltInteract_performed;
@@ -75,13 +81,34 @@ public class PlayerInput : MonoBehaviour
             case Binding.Controller_Pause:
                 return action.Player.Pause.bindings[1].ToDisplayString();
             case Binding.Move_Up:
-                //return action.Player.Move.bindings[1].bindings[0].ToDisplayString();
-            case Binding.Move_Down:
+                //LogBindings(action.Player.Move, "Before Rebind");
                 return action.Player.Move.bindings[2].ToDisplayString();
-            case Binding.Move_Left:
+            case Binding.Move_Down:
                 return action.Player.Move.bindings[4].ToDisplayString();
-            case Binding.Move_Right:
+            case Binding.Move_Left:
                 return action.Player.Move.bindings[6].ToDisplayString();
+            case Binding.Move_Right:
+                return action.Player.Move.bindings[8].ToDisplayString();
+        }
+    }
+
+    void LogBindings(InputAction action, string tag)
+    {
+        Debug.Log($"---- {tag} ----");
+
+        for (int i = 0; i < action.bindings.Count; i++)
+        {
+            var b = action.bindings[i];
+
+            Debug.Log(
+                $"Index: {i} | " +
+                $"Name: {b.name} | " +
+                $"Path: {b.path} | " +
+                $"Override: {b.overridePath} | " +
+                $"IsComposite: {b.isComposite} | " +
+                $"PartOfComposite: {b.isPartOfComposite} | " +
+                $"ID: {b.id}"
+            );
         }
     }
 
@@ -119,19 +146,19 @@ public class PlayerInput : MonoBehaviour
                 break;
             case Binding.Move_Up:
                 inputAction = action.Player.Move;
-                bindingIndex = 1;
+                bindingIndex = 2;
                 break;
             case Binding.Move_Down:
                 inputAction = action.Player.Move;
-                bindingIndex = 3;
+                bindingIndex = 4;
                 break;
             case Binding.Move_Left:
                 inputAction = action.Player.Move;
-                bindingIndex = 5;
+                bindingIndex = 6;
                 break;
             case Binding.Move_Right:
                 inputAction = action.Player.Move;
-                bindingIndex = 7;
+                bindingIndex = 8;
                 break;
         }
 
@@ -139,7 +166,11 @@ public class PlayerInput : MonoBehaviour
         {
             OnEnable();
             OnActionRebound();
+            //LogBindings(action.Player.Move, "After Rebind");
+            PlayerPrefs.SetString(PLAYER_INPUT_BINDINGS, action.SaveBindingOverridesAsJson());
+            PlayerPrefs.Save();
         }).Start();
+        
     }
 
     private void OnEnable()

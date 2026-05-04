@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class SoundEffectsManager : MonoBehaviour
 {
+    private const string PLAYER_PREFS_SOUND_EFFECTS_VOL = "SoundEffectsVol";
     public static SoundEffectsManager Instance { get; private set; }
     [SerializeField] private AudioClipRefSO audioClipRefSO;
 
@@ -10,6 +11,11 @@ public class SoundEffectsManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+
+        if (PlayerPrefs.HasKey(PLAYER_PREFS_SOUND_EFFECTS_VOL))
+        {
+            volume = PlayerPrefs.GetFloat(PLAYER_PREFS_SOUND_EFFECTS_VOL, 1f);        
+        }
     }
     private void Start()
     {
@@ -72,6 +78,9 @@ public class SoundEffectsManager : MonoBehaviour
         {
             volume = 0;
         }
+
+        PlayerPrefs.SetFloat(PLAYER_PREFS_SOUND_EFFECTS_VOL, volume);
+        PlayerPrefs.Save();
     }
 
     public float GetVolume()
