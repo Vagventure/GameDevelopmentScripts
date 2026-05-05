@@ -9,7 +9,11 @@ public class CuttingCounter : BaseCounter, IProgressBar
     private int cutProgress;
     [SerializeField] private CutKitchenObjectsSO[] cutKitchenObjectsSOs;
 
-   
+    public static void ResetStaticData()
+    {
+        OnAnyCut = null;
+    }
+
     public override void Interact(Player player)
     {
         if (HasKitchenObject())

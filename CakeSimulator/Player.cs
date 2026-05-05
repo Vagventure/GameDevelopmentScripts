@@ -45,7 +45,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 
     private void Input_OnInteractPerformed(object sender, System.EventArgs e)
     {
-        if (selectedCounter != null)
+        if (selectedCounter != null && CakeSimGameObject.Instance.IsGamePlaying())
         {
            selectedCounter.Interact(this);
             OnPickedSomething?.Invoke(this, EventArgs.Empty);
@@ -54,7 +54,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 
     private void Input_OnAltInteractperformed(object sender, EventArgs e)
     {
-        if(selectedCounter != null)
+        if(selectedCounter != null && CakeSimGameObject.Instance.IsGamePlaying())
         {
             selectedCounter.AltInteract(this);
         }

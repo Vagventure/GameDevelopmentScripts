@@ -5,7 +5,10 @@ public class PlateIconUI : MonoBehaviour
     [SerializeField] private PlateKitchenObject plateKitchenObject;
     [SerializeField] private Transform container;
     [SerializeField] private Transform iconTemplate;
+    [SerializeField] private KitchenObjectsSO bakeCounter;
+    [SerializeField] private GameObject bakeCounter2;
 
+    [SerializeField] private KitchenObjectsSO unBakedCakeBase;
     private void Awake()
     {
         iconTemplate.gameObject.SetActive(false);
@@ -15,6 +18,7 @@ public class PlateIconUI : MonoBehaviour
     {
         plateKitchenObject.OnIngredientAdded += PlateKitchenObject_OnIngredientAdded;
     }
+
 
     private void PlateKitchenObject_OnIngredientAdded(object sender, PlateKitchenObject.OnIngredientAddedEventArgs e)
     {
@@ -28,7 +32,7 @@ public class PlateIconUI : MonoBehaviour
             if (child == iconTemplate) continue;
             Destroy(child.gameObject);   
         }
-
+       
         foreach(KitchenObjectsSO kitchenObjectsSO in plateKitchenObject.GetKitchenObjectsSOList())
         {
             Transform iconTransform = Instantiate(iconTemplate,container);

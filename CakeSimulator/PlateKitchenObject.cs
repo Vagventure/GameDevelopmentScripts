@@ -14,12 +14,16 @@ public class PlateKitchenObject : KitchenObjects
     [SerializeField] private List<KitchenObjectsSO> validKitchenPlateObjectSOList;
     [SerializeField] private List<KitchenObjectsSO> validIcingObjectSOList;
 
+    private KitchenObjectsSO bakedCakeBase;
+    private KitchenObjectsSO unBakedCakeBase;
     private List<KitchenObjectsSO> kitchenPlateObjectsList;
     private bool doesNotContainsIcing = true;
 
     private void Awake()
     {
         kitchenPlateObjectsList = new List<KitchenObjectsSO>();
+        bakedCakeBase = validKitchenPlateObjectSOList[3];
+        unBakedCakeBase = validKitchenPlateObjectSOList[4];
     }
     public bool TryAddIngridient(KitchenObjectsSO kitchenObjectsSO)
     {
@@ -49,9 +53,32 @@ public class PlateKitchenObject : KitchenObjects
             return false;
            
         }
+        //if (kitchenObjectsSO == validKitchenPlateObjectSOList[3])
+        //{
+        //    foreach (KitchenObjectsSO kitchenObject in kitchenPlateObjectsList)
+        //    {
+        //        //Finding match for unBakedBase
+        //        if (kitchenObject == validKitchenPlateObjectSOList[4])
+        //        {
+        //            kitchenPlateObjectsList.Remove(kitchenObject);
+        //        }
+        //    }
+        //}
+        if (kitchenObjectsSO == bakedCakeBase)
+        {
+            foreach (KitchenObjectsSO kitchenObject in kitchenPlateObjectsList)
+            {
+                //Finding match for unBakedBase
+                if (kitchenObject == unBakedCakeBase)
+                {
+                    kitchenPlateObjectsList.Remove(kitchenObject);
+                }
+            }
+        }
 
 
-        kitchenPlateObjectsList.Add(kitchenObjectsSO);
+
+            kitchenPlateObjectsList.Add(kitchenObjectsSO);
         OnIngredientAdded?.Invoke(this, new OnIngredientAddedEventArgs
         {
             kitchenObjectsSO = kitchenObjectsSO

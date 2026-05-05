@@ -8,6 +8,7 @@ public class BakeCounter : BaseCounter, IProgressBar
 {
     public event EventHandler<IProgressBar.OnProgressChangedEventArgs> OnProgressChanged;
     public event EventHandler<OnMicrowaveStateChangedEventArgs> OnMicrowaveStateChanged;
+ 
     public class OnMicrowaveStateChangedEventArgs : EventArgs
     {
         public State state;
@@ -18,6 +19,7 @@ public class BakeCounter : BaseCounter, IProgressBar
     private float bakeTimer;
     private float burnTimer;
 
+
     public enum State
     {
         Idle,
@@ -27,7 +29,7 @@ public class BakeCounter : BaseCounter, IProgressBar
 
     }
 
-    private State state;
+    public State state;
 
 
     private void Start()
@@ -58,7 +60,7 @@ public class BakeCounter : BaseCounter, IProgressBar
                     {
                         if (plateKitchenObject.TryAddIngridient(bakingRecipeSO.bakedCakeBase))
                         {
-                            Debug.Log(0);
+                            //Debug.Log(0);
 
                             var visual = plateKitchenObject.transform.Find("CakeModel").GetComponent<PlateKitchenObject_Visual>();
 
@@ -70,12 +72,12 @@ public class BakeCounter : BaseCounter, IProgressBar
 
                             foreach (var kitchenObjectsSOGameObject in visual.GetKitchenObjectSOGameObjectList())
                             {
-                                Debug.Log(1);
+                                //Debug.Log(1);
                                 if(bakingRecipeSO.unBakedCakeBase == kitchenObjectsSOGameObject.kitchenObjectsSO)
                                 {
                                     plateKitchenObject.GetKitchenObjectsSOList().Remove(bakingRecipeSO.unBakedCakeBase);
                                     kitchenObjectsSOGameObject.gameObject.SetActive(false);
-                                    Debug.Log(kitchenObjectsSOGameObject.gameObject);
+                                    //Debug.Log(kitchenObjectsSOGameObject.gameObject);
                                     break;
                                 }
                             }
@@ -211,5 +213,4 @@ public class BakeCounter : BaseCounter, IProgressBar
 
     }
 
-   
 }

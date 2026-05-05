@@ -42,7 +42,8 @@ public class PlayerInput : MonoBehaviour
 
     private void Pause_performed(InputAction.CallbackContext obj)
     {
-        OnPauseperformed?.Invoke(this,EventArgs.Empty); 
+        OnPauseperformed?.Invoke(this,EventArgs.Empty);
+        Debug.Log("pause");
     }
 
     private void AltInteract_performed(InputAction.CallbackContext obj)
