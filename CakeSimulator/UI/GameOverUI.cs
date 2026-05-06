@@ -1,15 +1,22 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameOverUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI recipeDeliveredCount;
+    [SerializeField] private Button restartButton;
     
     private void Start()
     {
         CakeSimGameObject.Instance.OnStateChange += CakeSimGameObject_OnStateChange;
 
         Hide();
+    }
+
+    private void Awake()
+    {
+        restartButton.onClick.AddListener(() => { RestartGame(); });
     }
 
     private void CakeSimGameObject_OnStateChange(object sender, System.EventArgs e)
@@ -24,6 +31,11 @@ public class GameOverUI : MonoBehaviour
         {
             Hide();
         }
+    }
+
+    private void RestartGame()
+    {
+        Loader.Load(Loader.Scene.SampleScene);
     }
 
     private void Hide()
