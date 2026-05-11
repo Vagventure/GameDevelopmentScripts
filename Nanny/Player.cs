@@ -19,6 +19,9 @@ public class Player : MonoBehaviour
     [SerializeField, Tooltip("How strong gravity pulls the player down")]
     private float gravity = -9.81f;
 
+    [SerializeField, Tooltip("How fast the player rotates to face the move direction")]
+    private float rotationSpeed = 10f;
+
     [Header("Interaction Settings")]
 
     [SerializeField, Tooltip("How far in front of the player the interact raycast reaches")]
@@ -27,7 +30,12 @@ public class Player : MonoBehaviour
     [SerializeField, Tooltip("Which layers count as interactable objects")]
     private LayerMask interactableLayer;
 
+    [Header("Capsule Collision")]
+    [SerializeField, Tooltip("Height of the collision capsule — match your character height")]
+    private float playerHeight = 2f;
 
+    [SerializeField, Tooltip("Radius of the collision capsule — match your character width")]
+    private float playerRadius = 0.5f;
     // ──────────────────────────────────────────────
     // PRIVATE REFERENCES
     // ──────────────────────────────────────────────
@@ -40,6 +48,8 @@ public class Player : MonoBehaviour
 
     // Tracks vertical velocity (for gravity)
     private Vector3 _velocity;
+    private bool isWalking;
+    private bool isSprinting;
 
 
     // ──────────────────────────────────────────────
@@ -68,22 +78,105 @@ public class Player : MonoBehaviour
     // Reads the 2D move input and translates it into
     // 3D world-space movement relative to where the player is facing.
     // ──────────────────────────────────────────────
+    //private void HandleMovement()
+    //{
+    //    // Read the direction input (X = strafe, Y = forward/back)
+    //    Vector2 input = _input.MoveInput;
+
+    //    // Build a 3D direction from the 2D input
+    //    // We use the player's local forward/right axes so movement
+    //    // is always relative to which way the player is facing
+    //    Vector3 moveDirection = transform.right * input.x
+    //                          + transform.forward * input.y;
+
+    //    // Choose speed based on whether sprint is held
+    //    float currentSpeed = _input.IsSprinting ? sprintSpeed : movementSpeed;
+
+    //    // Apply the movement via CharacterController (handles collision automatically)
+    //    _controller.Move(moveDirection * currentSpeed * Time.deltaTime);
+    //}
+
     private void HandleMovement()
     {
-        // Read the direction input (X = strafe, Y = forward/back)
-        Vector2 input = _input.MoveInput;
+        Vector2 inputVector = _input.MoveInput.normalized;
+        //Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
 
-        // Build a 3D direction from the 2D input
-        // We use the player's local forward/right axes so movement
-        // is always relative to which way the player is facing
-        Vector3 moveDirection = transform.right * input.x
-                              + transform.forward * input.y;
+        Vector3 camForward = Camera.main.transform.forward;
+        Vector3 camRight = Camera.main.transform.right;
+        camForward.y = 0f;
+        camRight.y = 0f;
+        camForward.Normalize();
+        camRight.Normalize();
 
-        // Choose speed based on whether sprint is held
-        float currentSpeed = _input.IsSprinting ? sprintSpeed : movementSpeed;
+        Vector3 moveDir = (camForward * inputVector.y) + (camRight * inputVector.x);
 
-        // Apply the movement via CharacterController (handles collision automatically)
-        _controller.Move(moveDirection * currentSpeed * Time.deltaTime);
+
+        isWalking = moveDir != Vector3.zero;
+        isSprinting = _input.IsSprinting && isWalking;
+
+        float currentSpeed = isSprinting ? sprintSpeed : movementSpeed;
+        float moveDistance = currentSpeed * Time.deltaTime;
+
+        // Capsule top and bottom — inset by radius so the shape is accurate
+        Vector3 capsuleBottom = transform.position + Vector3.up * playerRadius;
+        Vector3 capsuleTop = transform.position + Vector3.up * (playerHeight - playerRadius);
+
+        // Primary cast: try full desired direction
+        bool canMove = !Physics.CapsuleCast(
+            capsuleBottom, capsuleTop,
+            playerRadius, moveDir, moveDistance
+        );
+
+        if (!canMove)
+        {
+            // Slide attempt 1: Z axis only (forward / back)
+            Vector3 moveDirZ = new Vector3(0f, 0f, moveDir.z).normalized;
+            canMove = moveDirZ != Vector3.zero && !Physics.CapsuleCast(
+                capsuleBottom, capsuleTop,
+                playerRadius, moveDirZ, moveDistance
+            );
+
+            if (canMove)
+            {
+                moveDir = moveDirZ;
+            }
+            else
+            {
+                // Slide attempt 2: X axis only (left / right)
+                Vector3 moveDirX = new Vector3(moveDir.x, 0f, 0f).normalized;
+                canMove = moveDirX != Vector3.zero && !Physics.CapsuleCast(
+                    capsuleBottom, capsuleTop,
+                    playerRadius, moveDirX, moveDistance
+                );
+
+                if (canMove)
+                {
+                    moveDir = moveDirX;
+                }
+                else
+                {
+                    Debug.Log("Collided — fully blocked");
+                }
+            }
+        }
+
+        // Feed the resolved direction into CharacterController
+        // It applies its own depenetration on top of our cast checks
+        if (canMove)
+        {
+            _controller.Move(moveDir * moveDistance);
+        }
+
+        // Rotate smoothly to face movement direction
+        if (moveDir != Vector3.zero)
+        {
+            transform.forward = Vector3.Slerp(
+                transform.forward,
+                moveDir,
+                rotationSpeed * Time.deltaTime
+            );
+
+        }
     }
 
 
