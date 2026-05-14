@@ -13,6 +13,7 @@ public class PlayerInput : MonoBehaviour
     // Stored input values — read these from PlayerController
     // ──────────────────────────────────────────────
     public Vector2 MoveInput { get; private set; } // WASD / Left Stick direction
+    public Vector2 LookInput { get; private set; } // Pointer / Right Stick direction
     public bool IsSprinting { get; private set; } // True while Sprint is held
     public bool InteractPressed { get; private set; } // True for one frame on press
     public bool IsCrouched { get; private set; }
@@ -33,6 +34,10 @@ public class PlayerInput : MonoBehaviour
             // ── Move ──────────────────────────────────
             _controls.Player.Move.performed += OnMove;
             _controls.Player.Move.canceled += OnMoveCanceled;
+
+            // -- Look ----------------------------------
+            _controls.Player.Look.performed += OnLook;
+            _controls.Player.Look.canceled += OnLookCanceled;
 
             // ── Sprint ────────────────────────────────
             _controls.Player.Sprint.performed += OnSprintStarted;
@@ -65,16 +70,6 @@ public class PlayerInput : MonoBehaviour
 
 
     // ──────────────────────────────────────────────
-    // Update: reset single-frame flags so they don't
-    // stay true longer than one frame.
-    // ──────────────────────────────────────────────
-    private void Update()
-    {
-        InteractPressed = false;
-    }
-
-
-    // ──────────────────────────────────────────────
     // INPUT CALLBACKS
     // Called automatically by the Input System.
     // ──────────────────────────────────────────────
@@ -85,10 +80,21 @@ public class PlayerInput : MonoBehaviour
         MoveInput = ctx.ReadValue<Vector2>();
     }
 
-    // Called when Move input returns to zero
+    // Called when Look input returns to zero
     private void OnMoveCanceled(InputAction.CallbackContext ctx)
     {
         MoveInput = Vector2.zero;
+    }
+
+    private void OnLook(InputAction.CallbackContext ctx)
+    {
+        LookInput = ctx.ReadValue<Vector2>();
+    }
+
+    // Called when Look input returns to zero
+    private void OnLookCanceled(InputAction.CallbackContext ctx)
+    {
+        LookInput = Vector2.zero;
     }
 
     // Called when Sprint is pressed / held
@@ -118,5 +124,10 @@ public class PlayerInput : MonoBehaviour
     private void OnInteract(InputAction.CallbackContext ctx)
     {
         InteractPressed = true;
+    }
+
+    public void ResetInteract()
+    {
+        InteractPressed = false;
     }
 }
